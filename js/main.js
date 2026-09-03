@@ -258,6 +258,9 @@
   /* ---------------- ENQUIRY FORM ---------------- */
   var form = document.getElementById("enquiry-form");
   var successBox = document.getElementById("enquiry-success");
+  var successTitle = document.getElementById("enquiry-success-title");
+  var successText = document.getElementById("enquiry-success-text");
+  var againBtn = document.getElementById("enquiry-again-btn");
 
   form.addEventListener("submit", function(e){
     e.preventDefault();
@@ -283,9 +286,22 @@
 
     window.open(waLink(lines.join("\n")), "_blank", "noopener");
 
+    var firstName = name.split(" ")[0] || "there";
+    successTitle.textContent = "Thank you, " + firstName + "! Your enquiry for " + destination + " has been received.";
+    successText.textContent = "We've opened WhatsApp with your details pre-filled — just hit send and our travel team will take it from there.";
+
+    form.reset();
     form.hidden = true;
     successBox.hidden = false;
   });
+
+  if(againBtn){
+    againBtn.addEventListener("click", function(){
+      successBox.hidden = true;
+      form.hidden = false;
+      document.getElementById("f-name").focus();
+    });
+  }
 
   /* ---------------- INIT ---------------- */
   refreshWhatsappLinks();
