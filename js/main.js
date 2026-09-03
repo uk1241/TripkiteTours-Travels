@@ -258,7 +258,6 @@
   /* ---------------- ENQUIRY FORM ---------------- */
   var form = document.getElementById("enquiry-form");
   var successBox = document.getElementById("enquiry-success");
-  var waBtn = document.getElementById("enquiry-wa-btn");
 
   form.addEventListener("submit", function(e){
     e.preventDefault();
@@ -282,8 +281,7 @@
     if(date) lines.push("Travel Date: " + date);
     if(message) lines.push("Message: " + message);
 
-    waBtn.setAttribute("data-wa-msg", lines.join("\n"));
-    refreshWhatsappLinks();
+    window.open(waLink(lines.join("\n")), "_blank", "noopener");
 
     form.hidden = true;
     successBox.hidden = false;
