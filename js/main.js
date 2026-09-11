@@ -54,6 +54,28 @@
     a.addEventListener("click", closeMenu);
   });
 
+  /* ---------------- LAZY BACKGROUND IMAGES ---------------- */
+  var lazyBackgrounds = document.querySelectorAll("[data-bg]");
+  function loadBackground(el){
+    var image = el.getAttribute("data-bg");
+    if(!image) return;
+    el.style.backgroundImage = "url('" + image.replace(/'/g, "\\'") + "')";
+    el.removeAttribute("data-bg");
+  }
+  if("IntersectionObserver" in window){
+    var backgroundObserver = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          loadBackground(entry.target);
+          backgroundObserver.unobserve(entry.target);
+        }
+      });
+    }, { rootMargin:"400px 0px" });
+    lazyBackgrounds.forEach(function(el){ backgroundObserver.observe(el); });
+  } else {
+    lazyBackgrounds.forEach(loadBackground);
+  }
+
   /* ---------------- DESTINATION TOGGLE ---------------- */
   var toggleBtns = document.querySelectorAll(".dest-toggle-btn");
   var domesticGrid = document.getElementById("domestic-grid");

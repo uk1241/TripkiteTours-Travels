@@ -39,7 +39,7 @@ body{
     radial-gradient(1100px 620px at 88% 0%, rgba(51,195,240,.10) 0%, rgba(51,195,240,0) 60%),
     radial-gradient(900px 560px at 8% 18%, rgba(24,89,196,.08) 0%, rgba(24,89,196,0) 55%),
     linear-gradient(180deg,#ffffff 0%,#f5faff 40%,#ffffff 100%);
-  background-attachment:fixed;
+  background-attachment:scroll;
 }
 img{max-width:100%;display:block;}
 a{color:inherit;text-decoration:none;}
@@ -152,9 +152,8 @@ section[id],.site-footer[id]{scroll-margin-top:96px;}
 }
 .hero-bg{
   position:absolute;inset:0;background-size:cover;background-position:center;
-  transform:scale(1.08);animation:heroZoom 18s ease-in-out infinite alternate;
+  transform:none;
 }
-@keyframes heroZoom{from{transform:scale(1.08);}to{transform:scale(1);}}
 .hero-overlay{
   position:absolute;inset:0;
   background:linear-gradient(180deg,rgba(6,18,42,.72) 0%,rgba(6,18,42,.55) 45%,rgba(6,18,42,.82) 100%);
@@ -354,7 +353,7 @@ section[id],.site-footer[id]{scroll-margin-top:96px;}
 
 /* ==================== VISION & MISSION ==================== */
 .vision-mission{position:relative;color:var(--white);overflow:hidden;}
-.vm-bg{position:absolute;inset:0;background-size:cover;background-position:center;background-attachment:fixed;}
+.vm-bg{position:absolute;inset:0;background-size:cover;background-position:center;background-attachment:scroll;}
 .vm-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,22,50,.88),rgba(8,22,50,.82));}
 .vision-mission .container{position:relative;z-index:2;}
 .vm-grid{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-top:20px;}
@@ -545,10 +544,6 @@ section[id],.site-footer[id]{scroll-margin-top:96px;}
   .dest-grid{grid-template-columns:repeat(2,1fr);grid-auto-rows:200px;}
   .dest-card-lg{grid-column:span 2;grid-row:span 1;}
 
-  /* Disable fixed background-attachment on mobile: jittery + costly on touch browsers */
-  .vm-bg{background-attachment:scroll;}
-  body{background-attachment:scroll;}
-}
 
 /* ---- Large phones / small tablets ---- */
 @media (max-width:640px){
