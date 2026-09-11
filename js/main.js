@@ -59,26 +59,28 @@
   var domesticGrid = document.getElementById("domestic-grid");
   var internationalGrid = document.getElementById("international-grid");
 
+  function showDestination(target){
+    var isDomestic = target === "domestic";
+    domesticGrid.hidden = !isDomestic;
+    domesticGrid.setAttribute("aria-hidden", String(!isDomestic));
+    internationalGrid.hidden = isDomestic;
+    internationalGrid.setAttribute("aria-hidden", String(isDomestic));
+
+    toggleBtns.forEach(function(btn){
+      var isActive = btn.getAttribute("data-target") === target;
+      btn.classList.toggle("active", isActive);
+      btn.setAttribute("aria-selected", String(isActive));
+    });
+    revealVisible();
+  }
+
   toggleBtns.forEach(function(btn){
     btn.addEventListener("click", function(){
-      toggleBtns.forEach(function(b){
-        b.classList.remove("active");
-        b.setAttribute("aria-selected", "false");
-      });
-      btn.classList.add("active");
-      btn.setAttribute("aria-selected", "true");
-
-      var target = btn.getAttribute("data-target");
-      if(target === "domestic"){
-        domesticGrid.hidden = false;
-        internationalGrid.hidden = true;
-      } else {
-        domesticGrid.hidden = true;
-        internationalGrid.hidden = false;
-      }
-      revealVisible();
+      showDestination(btn.getAttribute("data-target"));
     });
   });
+
+  showDestination("domestic");
 
   /* ---------------- SCROLL REVEAL ---------------- */
   var revealEls = document.querySelectorAll(".reveal-up");
@@ -108,7 +110,7 @@
       title: "Kerala — 4 Days 3 Nights",
       duration: "4 Days / 3 Nights",
       price: "INR 14,499 per person",
-      image: "https://loremflickr.com/1000/600/munnar,teagarden",
+      image: "assets/Kerala — 4 Days 3 Nights.jpg",
       itinerary: [
         "Arrival at Kochi, drive to Munnar. Check-in and evening at leisure.",
         "Munnar sightseeing — tea gardens, Eravikulam National Park, Mattupetty Dam.",
@@ -126,7 +128,7 @@
       title: "Kerala — 5 Days 4 Nights",
       duration: "5 Days / 4 Nights",
       price: "INR 16,999 per person",
-      image: "https://loremflickr.com/1000/600/alleppey,houseboat,backwaters",
+      image: "assets/Kerala — 5 Days 4 Nights.jpg",
       itinerary: [
         "Arrival at Kochi, drive to Munnar. Check-in and evening at leisure.",
         "Munnar sightseeing — tea gardens, Eravikulam National Park, Mattupetty Dam.",
@@ -145,7 +147,7 @@
       title: "Bali — 4 Days 3 Nights",
       duration: "4 Days / 3 Nights",
       price: "INR 19,999 per person",
-      image: "https://loremflickr.com/1000/600/bali,temple,tropical",
+      image: "assets/Bali — 4 Days 3 Nights.jpg",
       itinerary: [
         "Arrival in Bali, transfer to hotel. Evening at leisure.",
         "Uluwatu Temple, Tanah Lot Temple & Kecak fire dance.",
@@ -163,7 +165,7 @@
       title: "Lakshadweep — 4 Days 3 Nights",
       duration: "4 Days / 3 Nights",
       price: "INR 20,999",
-      image: "https://loremflickr.com/1000/600/lakshadweep,island,lagoon",
+      image: "assets/Lakshadweep — 4 Days 3 Nights.jpg",
       itinerary: [
         "Depart for Agatti Island, transfer to beachside homestay, evening at leisure.",
         "Agatti Island exploration, beach activities and local sightseeing.",
@@ -181,7 +183,7 @@
       title: "Phuket & Krabi — 5 Days 4 Nights",
       duration: "5 Days / 4 Nights",
       price: "INR 36,999 per person",
-      image: "https://loremflickr.com/1000/600/phuket,krabi,islands",
+      image: "assets/Phuket & Krabi — 5 Days 4 Nights.jpg",
       itinerary: [
         "Arrival in Phuket, transfer to hotel. Evening at leisure.",
         "Phuket City Tour — Big Buddha, Old Town, viewpoints.",
