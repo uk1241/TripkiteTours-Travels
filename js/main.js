@@ -56,10 +56,32 @@
 
   /* ---------------- LAZY BACKGROUND IMAGES ---------------- */
   var lazyBackgrounds = document.querySelectorAll("[data-bg]");
+  function optimizedAssetPath(image, width, format){
+    var filename = image.split("/").pop();
+    var stem = filename.replace(/\.[^.]+$/, "").replace(/[^a-z0-9]+/gi, "-").replace(/^-|-$/g, "").toLowerCase();
+    return "assets/optimized/" + stem + "-" + width + "." + format;
+  }
+  function responsiveAssetWidth(){
+    var viewport = window.innerWidth * Math.min(window.devicePixelRatio || 1, 2);
+    if(viewport <= 480) return 480;
+    if(viewport <= 768) return 768;
+    if(viewport <= 1280) return 1280;
+    return 1920;
+  }
+  function optimizedBackgroundValue(image){
+    var width = responsiveAssetWidth();
+    var avif = optimizedAssetPath(image, width, "avif");
+    var webp = optimizedAssetPath(image, width, "webp");
+    var fallback = "url('" + webp + "')";
+    if(window.CSS && CSS.supports("background-image", "image-set(url('" + webp + "') type('image/webp'))")){
+      return "image-set(url('" + avif + "') type('image/avif'), url('" + webp + "') type('image/webp'))";
+    }
+    return fallback;
+  }
   function loadBackground(el){
     var image = el.getAttribute("data-bg");
     if(!image) return;
-    el.style.backgroundImage = "url('" + image.replace(/'/g, "\\'") + "')";
+    el.style.backgroundImage = optimizedBackgroundValue(image);
     el.removeAttribute("data-bg");
   }
   if("IntersectionObserver" in window){
@@ -231,7 +253,14 @@
     ul.innerHTML = "";
     items.forEach(function(txt){
       var li = document.createElement("li");
-      li.textContent = txt;
+      if(id === "modal-itinerary"){
+        var itineraryText = document.createElement("span");
+        itineraryText.className = "itinerary-text";
+        itineraryText.textContent = txt;
+        li.appendChild(itineraryText);
+      } else {
+        li.textContent = txt;
+      }
       ul.appendChild(li);
     });
   }
@@ -240,7 +269,7 @@
     var pkg = PACKAGES[key];
     if(!pkg) return;
 
-    document.getElementById("modal-img").style.backgroundImage = "url('" + pkg.image + "')";
+    document.getElementById("modal-img").style.backgroundImage = "url('" + optimizedAssetPath(pkg.image, 768, "webp") + "')";
     document.getElementById("modal-title").textContent = pkg.title;
     document.getElementById("modal-duration").textContent = pkg.duration;
     document.getElementById("modal-price").textContent = pkg.price;
@@ -258,11 +287,13 @@
     refreshWhatsappLinks();
 
     modalBackdrop.classList.add("open");
+    document.body.classList.add("modal-open");
     document.body.style.overflow = "hidden";
   }
 
   function closePackageModal(){
     modalBackdrop.classList.remove("open");
+    document.body.classList.remove("modal-open");
     document.body.style.overflow = "";
   }
 
