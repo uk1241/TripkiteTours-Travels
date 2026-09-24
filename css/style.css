@@ -400,7 +400,7 @@ section[id],.site-footer[id]{scroll-margin-top:96px;}
 .testimonial-slider{
   position:relative;display:flex;align-items:center;gap:18px;
 }
-.testimonial-viewport{position:relative;overflow:hidden;flex:1;}
+.testimonial-viewport{position:relative;overflow:hidden;flex:1;touch-action:pan-y;}
 .testimonial-track{
   display:flex;gap:26px;transition:transform .45s ease;will-change:transform;
 }
@@ -591,9 +591,9 @@ section[id],.site-footer[id]{scroll-margin-top:96px;}
   .enquiry-form-wrap{padding:26px 22px;}
   .enquiry-form{grid-template-columns:1fr;gap:16px;}
 
-  .testimonial-slider{gap:0;}
+  .testimonial-slider{gap:10px;}
   .testimonial-card{flex-basis:100%;padding:26px 22px;}
-  .testimonial-nav{display:none;}
+  .testimonial-nav{width:40px;height:40px;font-size:1.8rem;}
 
   .footer-grid{grid-template-columns:1fr;gap:36px;text-align:left;}
   .social-grid{grid-template-columns:repeat(2,1fr);}

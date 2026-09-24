@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Testimonial Slider Unit Tests</title>
+    <style>
+      body { font-family: sans-serif; padding: 24px; }
+      .pass { color: #0a7d3b; font-weight: 700; }
+      .fail { color: #b42318; font-weight: 700; }
+      pre { background: #f8fafc; padding: 16px; border-radius: 8px; }
+    </style>
+  </head>
+  <body>
+    <h1>Testimonial Slider Unit Tests</h1>
+    <pre id="test-output">Running tests...</pre>
+
+    <script src="../js/testimonial-slider.js"></script>
+    <script>
+      (function(){
+        var output = document.getElementById('test-output');
+        var results = [];
+
+        function assert(condition, message){
+          results.push({ pass: !!condition, message: message });
+        }
+
+        var slider = window.TripkiteSlider;
+
+        assert(slider.moveCurrentIndex(0, 1, 4) === 1, 'Moves forward from index 0 to 1');
+        assert(slider.moveCurrentIndex(3, 1, 4) === 0, 'Wraps from last card to first card');
+        assert(slider.moveCurrentIndex(0, -1, 4) === 3, 'Wraps from first card to last card');
+        assert(slider.getSlideStep(300, 26, 390) === 326, 'Calculates desktop slide step from card width and gap');
+        assert(slider.getSlideStep(300, 26, 390) === slider.getSlideStep(300, 26, 390), 'Slide step is stable across repeated calls');
+        assert(slider.clampIndex(-1, 4) === 3, 'Clamps negative index to last slide');
+        assert(slider.clampIndex(5, 4) === 0, 'Clamps overflow index to first slide');
+        assert(slider.getTransformValue(2, 300, 26) === -652, 'Calculates negative transform for the third slide');
+
+        var failed = results.filter(function(item){ return !item.pass; });
+        var lines = results.map(function(item){
+          return (item.pass ? 'PASS: ' : 'FAIL: ') + item.message;
+        });
+
+        if(failed.length){
+          lines.unshift('RESULT: ' + failed.length + ' test(s) failed');
+          output.innerHTML = '<span class="fail">' + lines.join('\n') + '</span>';
+          window.__TEST_STATUS__ = { passed: false, failed: failed.length, total: results.length };
+        } else {
+          lines.unshift('RESULT: all tests passed');
+          output.innerHTML = '<span class="pass">' + lines.join('\n') + '</span>';
+          window.__TEST_STATUS__ = { passed: true, failed: 0, total: results.length };
+        }
+      })();
+    </script>
+  </body>
+</html>

@@ -156,37 +156,58 @@
     var prevBtn = testimonialSlider.querySelector(".testimonial-prev");
     var nextBtn = testimonialSlider.querySelector(".testimonial-next");
     var currentIndex = 0;
+    var touchStartX = 0;
+    var touchEndX = 0;
+    var sliderApi = window.TripkiteSlider;
 
     function updateTestimonialSlider(){
       var cardWidth = testimonialCards[0].getBoundingClientRect().width;
-      var gap = 26;
+      var gap = parseFloat(getComputedStyle(testimonialTrack).gap) || 26;
       var viewportWidth = testimonialSlider.querySelector(".testimonial-viewport").clientWidth;
-      var maxIndex = testimonialCards.length - 1;
-      var step = cardWidth + gap;
+      var step = sliderApi && sliderApi.getSlideStep ? sliderApi.getSlideStep(cardWidth, gap, viewportWidth) : cardWidth + gap;
 
-      if(window.innerWidth <= 640){
-        gap = 0;
-        step = cardWidth;
-      }
-      if(window.innerWidth <= 960 && window.innerWidth > 640){
-        gap = 18;
+      if(sliderApi && sliderApi.clampIndex){
+        currentIndex = sliderApi.clampIndex(currentIndex, testimonialCards.length);
+      } else if(currentIndex > testimonialCards.length - 1){
+        currentIndex = testimonialCards.length - 1;
+      } else if(currentIndex < 0){
+        currentIndex = 0;
       }
 
       testimonialTrack.style.transform = "translateX(-" + (currentIndex * step) + "px)";
-      if(currentIndex > maxIndex){ currentIndex = maxIndex; }
-      if(currentIndex < 0){ currentIndex = 0; }
     }
 
     function moveTestimonial(direction){
-      var maxIndex = testimonialCards.length - 1;
-      currentIndex += direction;
-      if(currentIndex < 0){ currentIndex = maxIndex; }
-      if(currentIndex > maxIndex){ currentIndex = 0; }
+      if(sliderApi && sliderApi.moveCurrentIndex){
+        currentIndex = sliderApi.moveCurrentIndex(currentIndex, direction, testimonialCards.length);
+      } else {
+        var maxIndex = testimonialCards.length - 1;
+        currentIndex += direction;
+        if(currentIndex < 0){ currentIndex = maxIndex; }
+        if(currentIndex > maxIndex){ currentIndex = 0; }
+      }
       updateTestimonialSlider();
     }
 
     prevBtn.addEventListener("click", function(){ moveTestimonial(-1); });
     nextBtn.addEventListener("click", function(){ moveTestimonial(1); });
+
+    testimonialSlider.addEventListener("touchstart", function(event){
+      touchStartX = event.touches[0].clientX;
+      touchEndX = touchStartX;
+    }, { passive:true });
+
+    testimonialSlider.addEventListener("touchmove", function(event){
+      touchEndX = event.touches[0].clientX;
+    }, { passive:true });
+
+    testimonialSlider.addEventListener("touchend", function(){
+      var swipeDistance = touchEndX - touchStartX;
+      if(Math.abs(swipeDistance) > 40){
+        moveTestimonial(swipeDistance < 0 ? 1 : -1);
+      }
+    });
+
     window.addEventListener("resize", updateTestimonialSlider);
     updateTestimonialSlider();
   }
