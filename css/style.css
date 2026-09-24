@@ -397,14 +397,24 @@ section[id],.site-footer[id]{scroll-margin-top:96px;}
 .enquiry-success p{color:var(--gray-600);max-width:420px;}
 
 /* ==================== TESTIMONIALS ==================== */
-.testimonials-grid{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:26px;
+.testimonial-slider{
+  position:relative;display:flex;align-items:center;gap:18px;
+}
+.testimonial-viewport{position:relative;overflow:hidden;flex:1;}
+.testimonial-track{
+  display:flex;gap:26px;transition:transform .45s ease;will-change:transform;
 }
 .testimonial-card{
-  background:var(--bg-light);border-radius:var(--radius);padding:32px;
+  flex:0 0 calc((100% - 52px) / 3);min-width:0;background:var(--bg-light);border-radius:var(--radius);padding:32px;
   transition:transform .3s ease,box-shadow .3s ease;
 }
 .testimonial-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-md);}
+.testimonial-nav{
+  width:46px;height:46px;border:none;border-radius:50%;background:var(--white);color:var(--navy);box-shadow:var(--shadow-sm);
+  font-size:2rem;line-height:1;display:grid;place-items:center;cursor:pointer;transition:transform .2s ease,box-shadow .2s ease;
+}
+.testimonial-nav:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);}
+.testimonial-nav:focus-visible{outline:3px solid rgba(24,89,196,.2);outline-offset:2px;}
 .stars{color:var(--cyan);letter-spacing:2px;margin-bottom:14px;}
 .testimonial-card p{color:var(--gray-700);margin-bottom:20px;font-style:italic;}
 .testimonial-author{display:flex;flex-direction:column;gap:2px;}
@@ -581,8 +591,9 @@ section[id],.site-footer[id]{scroll-margin-top:96px;}
   .enquiry-form-wrap{padding:26px 22px;}
   .enquiry-form{grid-template-columns:1fr;gap:16px;}
 
-  .testimonials-grid{grid-template-columns:1fr;}
-  .testimonial-card{padding:26px 22px;}
+  .testimonial-slider{gap:0;}
+  .testimonial-card{flex-basis:100%;padding:26px 22px;}
+  .testimonial-nav{display:none;}
 
   .footer-grid{grid-template-columns:1fr;gap:36px;text-align:left;}
   .social-grid{grid-template-columns:repeat(2,1fr);}
